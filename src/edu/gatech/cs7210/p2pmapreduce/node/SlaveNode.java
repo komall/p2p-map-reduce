@@ -7,6 +7,7 @@ public class SlaveNode implements INode {
 	}
 	
 	public void run() {
+		// execute Hadoop command line process with correct parameters
 		
 	}
 }
