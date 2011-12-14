@@ -33,7 +33,7 @@ public class SlaveNode implements INode {
 		}
 	}
 	
-	public void update(URL url) {
-		
+	public boolean update(URL url) {
+		return true;
 	}
 }
