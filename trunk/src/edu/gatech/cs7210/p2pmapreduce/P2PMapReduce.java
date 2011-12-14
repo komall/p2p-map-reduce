@@ -84,18 +84,6 @@ public class P2PMapReduce {
 		// add options
 		options.addOption("propertiesFile", true, "location of the properties file");
 		
-//		System.setProperty(ChordImpl.class.getName() + ".AsyncThread.no", "10");
-//		System.setProperty("de.uniba.wiai.lspi.chord.service.impl.ChordImpl.StabilizeTask.start", "1");
-//		System.setProperty("de.uniba.wiai.lspi.chord.service.impl.ChordImpl.StabilizeTask.interval", "10");
-//		System.setProperty("de.uniba.wiai.lspi.chord.service.impl.ChordImpl.FixFingerTask.start", "10");
-//		System.setProperty("de.uniba.wiai.lspi.chord.service.impl.ChordImpl.FixFingerTask.interval", "10");
-//		System.setProperty("de.uniba.wiai.lspi.chord.service.impl.ChordImpl.CheckPredecessorTask.start", "10");
-//		System.setProperty("de.uniba.wiai.lspi.chord.service.impl.ChordImpl.CheckPredecessorTask.interval", "10");
-//		System.setProperty("de.uniba.wiai.lspi.chord.service.impl.ChordImpl.successors", "5");
-//		System.setProperty(InvocationThread.CORE_POOL_SIZE_PROPERTY_NAME, "10");
-//		System.setProperty(InvocationThread.MAX_POOL_SIZE_PROPERTY_NAME, "10");
-//		System.setProperty(InvocationThread.KEEP_ALIVE_TIME_PROPERTY_NAME, "10");
-		
 		// parse the options
 		CommandLineParser parser = new PosixParser();
 		try {
