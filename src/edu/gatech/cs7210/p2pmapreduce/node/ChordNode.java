@@ -12,7 +12,11 @@ import edu.gatech.cs7210.p2pmapreduce.task.ITask;
 
 public class ChordNode {
 	
-	private Chord chord = new ChordImpl();
+	private Chord chord;
+	
+	public ChordNode() {
+		chord = new ChordImpl();
+	}
 	
 	public void runAsFirst() {
 		try {
