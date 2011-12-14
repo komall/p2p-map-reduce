@@ -28,6 +28,10 @@ your installation of Hadoop on this node. The "bin_dir", "config_dir" and
 "slave_config_dir" refer to aspects of the Hadoop installation on your node.
 Refer to the Hadoop documentation to learn about these properties.
 
+When running the "p2pmapreduce.jar" file, you must specify a single command
+line parameter, "propertiesFile". This should be the location of the
+properties file you configured in the instructions above.
+
 Once you have setup a node...
 
 If this is a Master node, you run the P2PMapReduce application with the 
