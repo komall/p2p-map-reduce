@@ -23,9 +23,8 @@ public class SlaveNode extends AbstractNode {
 	}
 	
 	public boolean run() {
-//		return executeCommand(
-//				ApplicationContext.getInstance().getBinDir() + File.separator + "slaves.sh");
-		return true;
+		return executeCommand(
+				ApplicationContext.getInstance().getBinDir() + File.separator + "slaves.sh");
 	}
 	
 	public boolean update(URL url) {

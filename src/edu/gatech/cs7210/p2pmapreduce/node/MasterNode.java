@@ -25,9 +25,8 @@ public class MasterNode extends AbstractNode {
 	}
 	
 	public boolean run() {
-//		return executeCommand(
-//				ApplicationContext.getInstance().getBinDir() + File.separator + "start-all.sh");
-		return true;
+		return executeCommand(
+				ApplicationContext.getInstance().getBinDir() + File.separator + "start-all.sh");
 	}
 	
 	public boolean update(URL url) {
@@ -37,30 +36,28 @@ public class MasterNode extends AbstractNode {
 	}
 	
 	public boolean executeTask(ITask task) {
-//		return executeCommand(task.getCommand());
-		return true;
+		return executeCommand(task.getCommand());
 	}
 	
 	public boolean shutdownMaster() {
-//		return executeCommand(
-//				ApplicationContext.getInstance().getBinDir() + File.separator + "stop-all.sh");
-		return true;
+		return executeCommand(
+				ApplicationContext.getInstance().getBinDir() + File.separator + "stop-all.sh");
 	}
 	
 	private void updateSlaveConfiguration(URL url) {
-		// update the Slave configuration file to include all Workers present
-		// in the Chord overlay which are delegated to this Master server
-//		try {
-//			ApplicationContext appContext = ApplicationContext.getInstance();
-//			File slaveConfigFile = new File(appContext.getConfigDir() + 
-//					File.separator + appContext.getSlaveConfigFile());
-//			BufferedWriter writer = new BufferedWriter(new FileWriter(slaveConfigFile, true));
-//			writer.write("\n" + url.getPath());
-//			writer.close();
-//		} catch (IOException e) {
-//			System.err.println("Failed to update slave config file");
-//			e.printStackTrace();
-//			System.exit(-1);
-//		}
+//		 update the Slave configuration file to include all Workers present
+//		 in the Chord overlay which are delegated to this Master server
+		try {
+			ApplicationContext appContext = ApplicationContext.getInstance();
+			File slaveConfigFile = new File(appContext.getConfigDir() + 
+					File.separator + appContext.getSlaveConfigFile());
+			BufferedWriter writer = new BufferedWriter(new FileWriter(slaveConfigFile, true));
+			writer.write("\n" + url.getPath());
+			writer.close();
+		} catch (IOException e) {
+			System.err.println("Failed to update slave config file");
+			e.printStackTrace();
+			System.exit(-1);
+		}
 	}
 }

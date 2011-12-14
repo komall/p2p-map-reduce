@@ -1,0 +1,46 @@
+Instructions for building and running P2P-Map-Reduce
+
+Unzip the p2pmapreduce.tar.gz file to a directory. This becomes the root directory.
+To build, navigate to this directory and run "ant p2pmapreducejar".
+
+In order to execute the jar produced, you must have the jar files in the "lib" folder,
+as well as the files in the "config" folder on the Java classpath.
+
+In order to run this application, you must have Hadoop installed on each node. The
+installation of Hadoop is beyond the scope of this document, see the documentation
+at http://hadoop.apache.org/common/docs/current/.
+
+Once you have installed Hadoop on each node and built the P2PMapReduce application,
+put the built application on each node with dependencies where expected, and modify
+the "app.properties.master" or "app.properties.slave" config files, for a master
+and slave setup respectively.
+
+You must specify all properties. The "first_node" property should only be set to 
+true if this is the first node you are starting in the topology. This node
+must also have the "node_type" property st to "NameNode" if it is the first node.
+
+All other nodes must have the "chord_bootstrap_port" and "bootstrap_url" set
+appropriately, so they can join the Chord overlay and find appropriate MapReduce
+clusters to join and to which tasks should be submit.
+
+The "map_reduce_port" property must be set to the port which you specified in
+your installation of Hadoop on this node. The "bin_dir", "config_dir" and
+"slave_config_dir" refer to aspects of the Hadoop installation on your node.
+Refer to the Hadoop documentation to learn about these properties.
+
+Once you have setup a node...
+
+If this is a Master node, you run the P2PMapReduce application with the 
+"app.properties.master" configuration file, and the process will run as
+a daemon, and will listen on the specified port for application requests.
+
+If this is a Slave node, you run the P2PMapReduce application once, and
+it will join the Chord overlay and an appropriate MapReduce cluster, and
+then the process will exit. This is normal. The Slave application does not
+need to run as a daemon process, it simply runs once to configure the
+Slave node.
+
+In order to submit tasks, you must implement the ITask interface (an 
+example implementation is included) and submit the task to the Chord
+overlay using any appropriate application (for example, Curl) or by using
+the "publishTask()" method of the ChordNode class.
