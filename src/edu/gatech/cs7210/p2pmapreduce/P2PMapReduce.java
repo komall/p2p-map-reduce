@@ -2,6 +2,7 @@ package edu.gatech.cs7210.p2pmapreduce;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.MalformedURLException;
 import java.util.Properties;
 
 import org.apache.commons.cli.CommandLine;
@@ -10,6 +11,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 
 import de.uniba.wiai.lspi.chord.data.URL;
+import org.apache.commons.cli.ParseException;
 import edu.gatech.cs7210.p2pmapreduce.comm.CommandDispatcher;
 import edu.gatech.cs7210.p2pmapreduce.comm.CommandListener;
 import edu.gatech.cs7210.p2pmapreduce.comm.requests.JoinRequest;
@@ -40,9 +42,9 @@ public class P2PMapReduce {
 		ApplicationContext.getInstance().getNode().run();
 	}
 	
-	public void startHadoopSlave(SlaveType type) {
+	public void startHadoopSlave(SlaveType type, URL url) {
 		ApplicationContext.getInstance().setNode(new SlaveNode(type));
-		runAsSlave(ApplicationContext.getInstance().getUrl());
+		runAsSlave(url);
 	}
 
 	private static void configure(String propertiesFile) {
@@ -112,15 +114,20 @@ public class P2PMapReduce {
 			}
 			
 			if (appContext.isMaster()) {
+				node.publishAsMaster();
 				p2pMapReduce.startHadoopMaster(appContext.getMasterType());
 			} else if (appContext.isSlave()) {
-				p2pMapReduce.startHadoopSlave(appContext.getSlaveType());
+				p2pMapReduce.startHadoopSlave(appContext.getSlaveType(), new URL(node.publishAsSlave()));
 			} else {
 				System.err.println("Node type not recognized");
 				System.exit(-1);
 			}
-		} catch (Exception e) {
+		} catch (ParseException e) {
 			System.err.println("Failed to parse arugments");
+			System.exit(-1);
+		} catch (MalformedURLException e) {
+			System.err.println("Master url was malformed");
+			e.printStackTrace();
 		}
 	}
 

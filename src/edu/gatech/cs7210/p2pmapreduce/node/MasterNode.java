@@ -39,6 +39,9 @@ public class MasterNode implements INode {
 		try {
 			shutdownMaster();
 			updateSlaveConfiguration(url);
+			// TODO: rather than wait an arbitrary amount of time for the master to shutdown,
+			// 	     read the processes input stream and determine success or failure and the
+			//       point at which the process terminates
 			Thread.sleep(20000);
 			run();
 			return true;
@@ -69,7 +72,7 @@ public class MasterNode implements INode {
 			File slaveConfigFile = new File(appContext.getConfigDir() + 
 					File.separator + appContext.getSlaveConfigFile());
 			BufferedWriter writer = new BufferedWriter(new FileWriter(slaveConfigFile, true));
-			writer.write(url.getPath());
+			writer.write("\n" + url.getPath());
 			writer.close();
 		} catch (IOException e) {
 			System.err.println("Failed to update slave config file");
