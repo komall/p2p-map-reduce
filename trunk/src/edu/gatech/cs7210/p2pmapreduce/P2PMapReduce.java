@@ -2,7 +2,6 @@ package edu.gatech.cs7210.p2pmapreduce;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.net.MalformedURLException;
 import java.util.Properties;
 
 import org.apache.commons.cli.CommandLine;
@@ -31,20 +30,22 @@ public class P2PMapReduce {
 	}
 	
 	private void runAsMaster(URL url) {
+		ApplicationContext.getInstance().getChordNode().run(
+				ApplicationContext.getInstance().getBootstrapUrl(), true);
 		CommandListener listener = new CommandListener();
 		listener.listen(url);
-		ApplicationContext.getInstance().getNode().run();
 	}
 	
-	private void runAsSlave(URL url) {
+	private void runAsSlave() {
+		URL url = ApplicationContext.getInstance().getChordNode().run(
+				ApplicationContext.getInstance().getBootstrapUrl(), false);
 		CommandDispatcher dispatcher = new CommandDispatcher();
 		dispatcher.dispatch(new JoinRequest(url));
-		ApplicationContext.getInstance().getNode().run();
 	}
 	
-	public void startHadoopSlave(SlaveType type, URL url) {
+	public void startHadoopSlave(SlaveType type) {
 		ApplicationContext.getInstance().setNode(new SlaveNode(type));
-		runAsSlave(url);
+		runAsSlave();
 	}
 
 	private static void configure(String propertiesFile) {
@@ -106,18 +107,15 @@ public class P2PMapReduce {
 			}
 			
 			if (appContext.isFirstNode()) {
-				appContext.setFirstNode(true);
 				System.out.println("Starting ChordNode as first node in chord topology");
+				appContext.setFirstNode(true);
 				node.runAsFirst();
-			} else {
-				node.run(appContext.getUrl());
-			}
-			
-			if (appContext.isMaster()) {
-				node.publishAsMaster();
+			} else if (appContext.isMaster()) {
+				System.out.println("Joining Chord topology as Master");
 				p2pMapReduce.startHadoopMaster(appContext.getMasterType());
 			} else if (appContext.isSlave()) {
-				p2pMapReduce.startHadoopSlave(appContext.getSlaveType(), new URL(node.publishAsSlave()));
+				System.out.println("Joining Chord topology as Slave");
+				p2pMapReduce.startHadoopSlave(appContext.getSlaveType());
 			} else {
 				System.err.println("Node type not recognized");
 				System.exit(-1);
@@ -125,9 +123,6 @@ public class P2PMapReduce {
 		} catch (ParseException e) {
 			System.err.println("Failed to parse arugments");
 			System.exit(-1);
-		} catch (MalformedURLException e) {
-			System.err.println("Master url was malformed");
-			e.printStackTrace();
 		}
 	}
 
