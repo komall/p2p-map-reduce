@@ -19,7 +19,7 @@ public abstract class AbstractNode implements INode {
 			}
 			return true;
 		} catch (IOException e) {
-			System.err.println("Failed to execute task [" + command + "]");
+			System.err.println("Failed to execute command [" + command + "]");
 			e.printStackTrace();
 			System.exit(-1);
 		}
