@@ -1,5 +1,7 @@
 package edu.gatech.cs7210.p2pmapreduce.node;
 
+import java.io.File;
+
 import de.uniba.wiai.lspi.chord.data.URL;
 import edu.gatech.cs7210.p2pmapreduce.ApplicationContext;
 import edu.gatech.cs7210.p2pmapreduce.task.ITask;
