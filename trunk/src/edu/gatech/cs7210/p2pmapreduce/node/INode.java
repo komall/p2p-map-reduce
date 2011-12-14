@@ -6,5 +6,5 @@ public interface INode {
 
 	public void run();
 	
-	public void update(URL url);
+	public boolean update(URL url);
 }

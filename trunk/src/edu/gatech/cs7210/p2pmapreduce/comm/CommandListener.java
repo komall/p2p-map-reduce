@@ -37,6 +37,9 @@ public class CommandListener {
 				
 				IRequest request = (IRequest)is.readObject();
 				IResponse response = request.handleRequest(this);
+				if (!response.isSuccess()) {
+					System.err.println("Failed to add Slave node");
+				}
 				
 			} catch (IOException e) {
 				System.out.println("Accept failed: " + url.getPort());
@@ -67,7 +70,6 @@ public class CommandListener {
 			return new JoinResponse(false);
 		}
 		INode node = ApplicationContext.getInstance().getNode();
-		node.update(request.getUrl());
-		return new JoinResponse(true);
+		return new JoinResponse(node.update(request.getUrl()));
 	}
 }
