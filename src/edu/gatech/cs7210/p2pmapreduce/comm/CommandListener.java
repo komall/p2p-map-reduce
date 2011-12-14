@@ -10,8 +10,10 @@ import de.uniba.wiai.lspi.chord.data.URL;
 import edu.gatech.cs7210.p2pmapreduce.ApplicationContext;
 import edu.gatech.cs7210.p2pmapreduce.comm.requests.IRequest;
 import edu.gatech.cs7210.p2pmapreduce.comm.requests.JoinRequest;
+import edu.gatech.cs7210.p2pmapreduce.comm.requests.TaskRequest;
 import edu.gatech.cs7210.p2pmapreduce.comm.responses.IResponse;
 import edu.gatech.cs7210.p2pmapreduce.comm.responses.JoinResponse;
+import edu.gatech.cs7210.p2pmapreduce.comm.responses.TaskResponse;
 import edu.gatech.cs7210.p2pmapreduce.node.INode;
 import edu.gatech.cs7210.p2pmapreduce.node.MasterNode;
 
@@ -71,5 +73,13 @@ public class CommandListener {
 		}
 		INode node = ApplicationContext.getInstance().getNode();
 		return new JoinResponse(node.update(request.getUrl()));
+	}
+	
+	public IResponse handleRequest(TaskRequest request) {
+		if (!ApplicationContext.getInstance().isMaster()) {
+			return new JoinResponse(false);
+		}
+		INode node = ApplicationContext.getInstance().getNode();
+		return new TaskResponse(node.executeTask(request.getTask()));
 	}
 }

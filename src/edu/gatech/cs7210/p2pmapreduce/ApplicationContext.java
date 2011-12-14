@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 
 import de.uniba.wiai.lspi.chord.data.URL;
+import edu.gatech.cs7210.p2pmapreduce.node.ChordNode;
 import edu.gatech.cs7210.p2pmapreduce.node.INode;
 import edu.gatech.cs7210.p2pmapreduce.node.MasterNode.MasterType;
 import edu.gatech.cs7210.p2pmapreduce.node.SlaveNode.SlaveType;
@@ -14,8 +15,9 @@ public class ApplicationContext {
 	private boolean firstNode = false;
 	private String protocol = "http";
 	private int port = 3333;
+	private ChordNode chordNode;
 	private INode node;
-	private String bootstrapUrl;
+	private URL bootstrapUrl;
 	private MasterType masterType;
 	private SlaveType slaveType;
 	private String configDir;
@@ -32,6 +34,14 @@ public class ApplicationContext {
 		return INSTANCE;
 	}
 	
+	public INode getNode() {
+		return node;
+	}
+
+	public void setNode(INode node) {
+		this.node = node;
+	}
+
 	public boolean isFirstNode() {
 		return firstNode;
 	}
@@ -64,20 +74,26 @@ public class ApplicationContext {
 		return null;
 	}
 	
-	public void setNode(INode node) {
-		this.node = node;
+	public void setChordNode(ChordNode chordNode) {
+		this.chordNode = chordNode;
 	}
 	
-	public INode getNode() {
-		return this.node;
+	public ChordNode getChordNode() {
+		return this.chordNode;
 	}
 
-	public String getBootstrapUrl() {
+	public URL getBootstrapUrl() {
 		return bootstrapUrl;
 	}
 
 	public void setBootstrapUrl(String bootstrapUrl) {
-		this.bootstrapUrl = bootstrapUrl;
+		try {
+			this.bootstrapUrl = new URL(bootstrapUrl);
+		} catch (MalformedURLException e) {
+			System.err.println("Bootstrap URL is malformed");
+			e.printStackTrace();
+			System.exit(-1);
+		}
 	}
 
 	public String getConfigDir() {
