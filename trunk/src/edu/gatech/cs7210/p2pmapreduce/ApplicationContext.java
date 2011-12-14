@@ -13,8 +13,7 @@ import edu.gatech.cs7210.p2pmapreduce.node.SlaveNode.SlaveType;
 public class ApplicationContext {
 	
 	private boolean firstNode = false;
-	private String protocol = "http";
-	private int port = 3333;
+	private String protocol = "http://";
 	private ChordNode chordNode;
 	private INode node;
 	private URL bootstrapUrl;
@@ -25,6 +24,8 @@ public class ApplicationContext {
 	private String slaveConfigFile;
 	private boolean isMaster = false;
 	private boolean isSlave = false;
+	private int mapReducePort;
+	private int chordPort;
 
 	private ApplicationContext() { }
 	
@@ -50,8 +51,12 @@ public class ApplicationContext {
 		this.firstNode = firstNode;
 	}
 	
-	public void setPort(int port) {
-		this.port = port;
+	public void setMapReducePort(int port) {
+		this.mapReducePort = port;
+	}
+	
+	public void setChordPort(int port) {
+		this.chordPort = port;
 	}
 	
 	public void setProtocol(String protocol) {
@@ -62,7 +67,7 @@ public class ApplicationContext {
 		String url = "";
 		try {
 			InetAddress localhost = InetAddress.getLocalHost();
-			url = this.protocol + "://" + localhost.getHostAddress() + ":" + port + "/";
+			url = this.protocol + "://" + localhost.getHostAddress() + ":" + chordPort + "/";
 			return new URL(url);
 		} catch (UnknownHostException e) {
 			System.err.println("Failed to get address of localhost");
@@ -88,7 +93,8 @@ public class ApplicationContext {
 
 	public void setBootstrapUrl(String bootstrapUrl) {
 		try {
-			this.bootstrapUrl = new URL(bootstrapUrl);
+			System.out.println("tcp://" + bootstrapUrl + ":" + this.chordPort + "/");
+			this.bootstrapUrl = new URL(URL.KNOWN_PROTOCOLS.get(URL.SOCKET_PROTOCOL).toString() + "://" + bootstrapUrl + ":" + this.chordPort + "/");
 		} catch (MalformedURLException e) {
 			System.err.println("Bootstrap URL is malformed");
 			e.printStackTrace();
@@ -116,8 +122,12 @@ public class ApplicationContext {
 		return protocol;
 	}
 
-	public int getPort() {
-		return port;
+	public int getMapReducePort() {
+		return mapReducePort;
+	}
+
+	public int getChrodPort() {
+		return chordPort;
 	}
 	
 	public void setFirstNode(String firstNode) {
