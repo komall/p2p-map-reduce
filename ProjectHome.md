@@ -1,0 +1,1 @@
+Share your resources with a Map Reduce P2P network, and submit your own Map Reduce tasks. Uses Hadoop and Open Chord.
